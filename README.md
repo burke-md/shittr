@@ -28,3 +28,5 @@ Open [http://localhost:3000](http://localhost:3000).
 - Official [documentation](https://developers.google.com/maps/documentation/javascript/react-map) for adding google maps into a react project
 
 - Unofficial [notes](https://medium.com/web-dev-survey-from-kyoto/3-gotchas-of-google-maps-api-when-used-with-next-js-and-eslint-dba627c9657d) on google's react implementation compatibilty with Next.js
+
+- Alternative pre-built map [colour scheme](https://snazzymaps.com/)
