@@ -9,7 +9,7 @@ export default async function(req, res){
     res.status(500);
     res.json({error: "Unable to handle request"});
   } finally {
-    await prisma.disconnect();
+    await prisma.$disconnect();
   }
 
   res.status(200);
