@@ -3,6 +3,8 @@ import { useState, useCallback } from "react";
 import { QueryClientProvider, QueryClient, useQuery, useMutation, queryCatch } from "react-query";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import mapStyleOverride from "../util/mapStyleOverride";
+import { useSession, signIn, signOut } from "next-auth/react"
+
 
 const libraries = ["places"];
 
@@ -45,10 +47,15 @@ async function createLocationReq(locationData) {
 const queryClient = new QueryClient()
 
 export default function App() {
-
+  const { data: session } = useSession()
   return (
     <QueryClientProvider client={queryClient}>
-      <ShowMap />
+      {session && <ShowMap />}
+      {!session && 
+      <>
+      Not signed in <br />
+      <button onClick={() => signIn()}>Sign in</button>
+      </>}
     </QueryClientProvider>
   )
 }
