@@ -4,8 +4,11 @@ export default function LoginForm() {
 
     const res = await fetch('/api/users/login', {
       body: JSON.stringify({
-        username: event.target.username.value,
-        password: event.target.password.value
+        user: {
+          username: event.target.username.value,
+          password: event.target.password.value
+        }
+        
       }),
       headers: {
         'Content-Type': 'application/json'

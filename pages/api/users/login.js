@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 export default async function(req, res){
   
@@ -13,9 +14,13 @@ export default async function(req, res){
       },
     })
 
+    const isPassValid = await bcrypt.compare(userData.password, dbUser.passHash)
+
     //IMPORTANT add security and JWT here
-    if(dbUser.passHash === userData.passHash) {
+    if(isPassValid) {
       console.log(`LOGIN`);
+    } else{
+      console.log(`bad pass :${isPassValid}`)   
     }
 
     res.status(201);
