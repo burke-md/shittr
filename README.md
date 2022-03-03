@@ -33,3 +33,5 @@ Open [http://localhost:3000](http://localhost:3000).
 - Unofficial [notes](https://medium.com/web-dev-survey-from-kyoto/3-gotchas-of-google-maps-api-when-used-with-next-js-and-eslint-dba627c9657d) on google's react implementation compatibilty with Next.js
 
 - Alternative pre-built map [colour scheme](https://snazzymaps.com/)
+
+- Optimistic update using [useMutation side effects](https://react-query.tanstack.com/guides/mutations)

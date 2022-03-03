@@ -1,26 +1,24 @@
 import React from "react";
-import { useState, useCallback } from "react";
-import { QueryClientProvider, QueryClient, useQuery, useMutation, queryCatch } from "react-query";
-import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import { useCallback } from "react";
+import { QueryClientProvider, QueryClient, useQuery, useMutation } from "react-query";
+import { GoogleMap, useLoadScript, Marker, Data } from "@react-google-maps/api";
 import mapStyleOverride from "../util/mapStyleOverride";
 import { useSession, signIn, signOut } from "next-auth/react"
 
 
 const libraries = ["places"];
-
 const mapContainerStyle = {
   height: "100vh",
   width: "100vw",
 };
-
 const options = {
   styles: mapStyleOverride,
   disableDefaultUI: true,
   zoomControl: true,
 };
 const center = {
-  lat: 50,
-  lng: -50,
+  lat: 43.6532,
+  lng: -79.3832,
 };
 
 async function fetchLocationsReq(){
@@ -40,7 +38,6 @@ async function createLocationReq(locationData) {
   })
   const data = await res.json();
   const { location } = data;
-  console.log(`New location created: ${JSON.stringify(location)}`);
   return location;
 }
 
@@ -69,8 +66,29 @@ function ShowMap(){
 
   const {data: locationsData, status} = useQuery("locationsData", fetchLocationsReq);
 
+  const mutation = useMutation(createLocationReq, {
+    /*Optimistic update
+    -> Stop queries, preserve existing data, force update data with temp key
+    -> If error, roll back to prev state
+    -> Refetch & confirm. Update key w/ real key from db
+    */
+   
+    onMutate: (newData) => {
+      queryClient.cancelQueries("locationsData");
+      const existing = queryClient.getQueryData("locationsData");
+      queryClient.setQueryData("locationsData", (prev) => [
+        ...prev,
+        {...newData, id: new Date().toISOString() },
+      ]);
+      //return cache state for rollback
+      return existing;
+    },
+    onError: (error, newData, rollback) => rollback(),
+    onSettled: () => queryClient.refetchQueries("locations"),
+  });
+
   const onMapClick = useCallback((e) => {
-    createLocationReq({
+    mutation.mutate({
       latitude: e.latLng.lat(),
       longitude: e.latLng.lng()
     })
@@ -83,8 +101,6 @@ function ShowMap(){
 
   if (loadError) return "Error";
   if (!isLoaded) return "Loading map...";
-
-  console.log(`LocationsData: ${JSON.stringify(locationsData)}`)
 
   return (
     <>
