@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export default async function(req, res){
-  
   const prisma = new PrismaClient({ log: ["query"] });
 
   try {
@@ -16,15 +16,19 @@ export default async function(req, res){
 
     const isPassValid = await bcrypt.compare(userData.password, dbUser.passHash)
 
-    //IMPORTANT add security and JWT here
-    if(isPassValid) {
-      console.log(`LOGIN`);
-    } else{
-      console.log(`bad pass :${isPassValid}`)   
-    }
+    if(!isPassValid) {
+      res.status(401);
+      res.json({error: "Unathorized"});
+      return;
+    } 
+
+    const tokenUser = { name: userData.username}
+
+    const accessToken = jwt.sign(tokenUser, process.env.JWT_ACCESS_SECRET)
 
     res.status(201);
-    res.json({});
+    res.json({acessToken: accessToken});
+
   } catch (err) {
     console.log(err);
     res.status(500);
