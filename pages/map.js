@@ -67,7 +67,7 @@ function ShowMap(){
     libraries,
   });
 
-  const {data: locationsData} = useQuery("locationsData", fetchLocationsReq);
+  const {data: locationsData, status} = useQuery("locationsData", fetchLocationsReq);
 
   const onMapClick = useCallback((e) => {
     createLocationReq({
@@ -76,29 +76,41 @@ function ShowMap(){
     })
   }, []);
 
+  const mapRef = React.useRef();
+  const onMapLoad = React.useCallback((map) => {
+    mapRef.current = map;
+  }, []);
+
   if (loadError) return "Error";
   if (!isLoaded) return "Loading map...";
 
   console.log(`LocationsData: ${JSON.stringify(locationsData)}`)
 
   return (
-    <GoogleMap
-      id="map"
-      mapContainerStyle={mapContainerStyle}
-      zoom={8}
-      center={center}
-      options={options}
-      onClick={onMapClick}
-      >
-    {locationsData?.map((location) => (
-      <Marker 
-      key={location.id}
-      position={{
-        lat: Number(location.latitude), 
-        lng: Number(location.lngitude)
-      }}
-      />
-    ))}  
-    </GoogleMap>
+    <>
+    {status === "loading" && <p>Loading..</p>}
+
+    {status === "success"  &&(
+      <GoogleMap
+        id="map"
+        mapContainerStyle={mapContainerStyle}
+        zoom={8}
+        center={center}
+        options={options}
+        onClick={onMapClick}
+        onLoad={onMapLoad}
+        >
+      {locationsData?.map((location) => (
+        <Marker 
+        key={location.id}
+        position={{
+          lat: Number(location.latitude), 
+          lng: Number(location.longitude)
+        }}
+        />
+      ))}  
+      </GoogleMap>
+    )}
+    </>
   );
 }
