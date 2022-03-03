@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 export default async function(req, res){
   
@@ -7,10 +8,11 @@ export default async function(req, res){
 
   try {
     const {user: userData} = req.body;
+    const passHash = await bcrypt.hash(userData.password, 10);
     const user = await prisma.users.create({
       data: {
-        userName:userData.userName,
-        passHash: userData.passHash,
+        userName:userData.username,
+        passHash: passHash,
       },
     });
 
