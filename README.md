@@ -16,6 +16,12 @@ Open [http://localhost:3000](http://localhost:3000).
 
 
 
+
+https://user-images.githubusercontent.com/22263098/156674426-039360a0-f325-470c-a45b-f7efda07384d.mov
+
+
+
+
 ## Learning outcomes:
 - This project is using postgreSQL databases hosted on Heroku. Prisma requires a temporary shadow db for migrations but does not allow the propper permissions for this. It has been manually added and can be seen in the schema.prisma file.
 
