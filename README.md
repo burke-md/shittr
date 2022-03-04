@@ -16,9 +16,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 
 
-
-https://user-images.githubusercontent.com/22263098/156674426-039360a0-f325-470c-a45b-f7efda07384d.mov
-
+https://user-images.githubusercontent.com/22263098/156674553-6c55e1d9-c181-4ae8-8a53-a520034d9b40.mov
 
 
 
