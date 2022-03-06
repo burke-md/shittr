@@ -17,10 +17,12 @@ Open [http://localhost:3000](http://localhost:3000).
 
 
 ## Learning outcomes:
+
+- Being the first project I've built with Next.js there has been a large paradigm shift in how I view project structure.
+
+- NextAuth.js is a powerful JWT based authentication system that alleviates much of the work involved in encrypting/auth.
+
 - This project is using postgreSQL databases hosted on Heroku. Prisma requires a temporary shadow db for migrations but does not allow the propper permissions for this. It has been manually added and can be seen in the schema.prisma file.
-
-- NextAuth.js is a powerful JWT based authentication system that alleviates much of the work involved in encrypting/autheticating.
-
 
 ## Resources:
 
