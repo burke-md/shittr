@@ -7,35 +7,12 @@ export default async function(req, res){
   try {
       const reqData = req.body;
       const crudOpsRetrurn = [];
+
+      for (const opp in reqData){
+        const result = await handdleCrud(opp, reqData[opp]);
+        crudOpsRetrurn.push(result)
+      }
       
-      console.log(Object.keys(reqData));
-
-      if (reqData.create){
-        const action = await create(reqData.create);
-        action !== -1 ?
-        crudOpsRetrurn.push(action):
-        crudOpsRetrurn.push({"error": reqData})
-      }
-      if (reqData.read){
-        const action = await read();
-        action !== -1 ?
-        crudOpsRetrurn.push(action):
-        crudOpsRetrurn.push({"error": reqData})
-      }
-      if (reqData.update){
-        const action = await update(reqData.update);
-        action !== -1 ?
-        crudOpsRetrurn.push(action):
-        crudOpsRetrurn.push({"error": reqData})
-      }
-      if (reqData.del){
-        const action = await del(reqData.del);
-        action !== -1 ?
-        crudOpsRetrurn.push(action):
-        crudOpsRetrurn.push({"error": reqData})
-      }
-
-
       res.status(200);
       res.json({crudOpsRetrurn});
   } catch (err) {
@@ -43,4 +20,27 @@ export default async function(req, res){
     res.status(500);
     res.json({error: "Unable to handle request"});
   }
+}
+
+
+async function handdleCrud(opperation, data) {
+  let action = null;
+
+  if (opperation === "create"){
+    action = await create(data);
+  }
+  if (opperation === "read"){
+    action = await read();
+  }
+  if (opperation === "update"){
+    action = await update(data);
+  }
+  if (opperation === "del"){
+    action = await del(data);
+  }
+
+  if (action === -1){
+    return {error: { [opperation]:{data}}}
+  }
+  return action;
 }
