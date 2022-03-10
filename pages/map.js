@@ -22,10 +22,15 @@ const center = {
 };
 
 async function fetchLocationsReq(){
-  const res = await fetch("/api/locations/read");
+  const res = await fetch("/api/locations/qq", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json"
+    },
+    body: JSON.stringify({read: {"locations": ""}})
+  });
   const data = await res.json();
-  const { locations } = data;
-  return locations;
+  return data.crudOpsReturn[0];
 }
 
 async function createLocationReq(locationData) {
