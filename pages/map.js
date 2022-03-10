@@ -2,7 +2,7 @@ import React from "react";
 import { useCallback } from "react";
 import { QueryClientProvider, QueryClient, useQuery, useMutation } from "react-query";
 import { GoogleMap, useLoadScript, Marker, Data } from "@react-google-maps/api";
-import mapStyleOverride from "../util/mapStyleOverride";
+import mapStyleOverride from "../data/mapStyleOverride";
 import { useSession, signIn, signOut } from "next-auth/react"
 
 
