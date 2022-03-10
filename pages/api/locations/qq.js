@@ -6,15 +6,15 @@ import del from './actions/del';
 export default async function(req, res){
   try {
       const reqData = req.body;
-      const crudOpsRetrurn = [];
+      const crudOpsReturn = [];
 
       for (const opp in reqData){
         const result = await handdleCrud(opp, reqData[opp]);
-        crudOpsRetrurn.push(result)
+        crudOpsReturn.push(result)
       }
       
       res.status(200);
-      res.json({crudOpsRetrurn});
+      res.json({crudOpsReturn});
   } catch (err) {
     console.log(err);
     res.status(500);
