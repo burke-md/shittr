@@ -34,12 +34,15 @@ async function fetchLocationsReq(){
 }
 
 async function createLocationReq(locationData) {
-  const res = await fetch("/api/locations/create", {
+  const res = await fetch("/api/locations/qq", {
     method: "POST",
     headers: {
       "Content-type": "application/json"
     },
-    body: JSON.stringify({ location: locationData})
+    body: JSON.stringify({ create: {
+        ...locationData
+      }
+    })
   })
   const data = await res.json();
   const { location } = data;
