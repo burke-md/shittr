@@ -1,3 +1,5 @@
+import { PrismaClient } from "@prisma/client";
+
 export default async function(data){
   const prisma = new PrismaClient({ log: ["query"] });
 
