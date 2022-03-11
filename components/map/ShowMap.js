@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { QueryClientProvider, QueryClient, useQuery, useMutation } from "react-query";
 import { GoogleMap, useLoadScript, Marker, Data } from "@react-google-maps/api";
 import mapStyleOverride from "../../data/mapStyleOverride";
+import fetchLocationsReq from "../../util/mapRequests/fetchLocationsReq"
 
 
 const libraries = ["places"];
@@ -21,7 +22,7 @@ const center = {
 };
 
 const queryClient = new QueryClient()
-
+/*
 async function fetchLocationsReq(){
   const res = await fetch("/api/locations/qq", {
     method: "POST",
@@ -35,7 +36,7 @@ async function fetchLocationsReq(){
   console.log(`parsedData: ${parsedData}`);
   return parsedData;
 }
-
+*/
 async function createLocationReq(locationData) {
   console.log(`called create`)
   const res = await fetch("/api/locations/qq", {
