@@ -1,4 +1,4 @@
-export default async function fetchLocations(locationData) {
+export default async function createLocations(locationData) {
     const res = await fetch("/api/locations/qq", {
       method: "POST",
       headers: {

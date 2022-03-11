@@ -1,10 +1,10 @@
-import React from "react";
-import { useCallback } from "react";
-import { QueryClientProvider, QueryClient, useQuery, useMutation } from "react-query";
+import React, { useCallback } from "react";
+import { QueryClient, useQuery, useMutation } from "react-query";
 import { GoogleMap, useLoadScript, Marker, Data } from "@react-google-maps/api";
 import mapStyleOverride from "../../data/mapStyleOverride";
-import fetchLocationsReq from "../../util/mapRequests/fetchLocationsReq";
-import createLocationReq from "../../util/mapRequests/createLocationsReq";
+import fetchLocationsReq from "../../util/mapFuncs/fetchLocationsReq";
+import createLocationReq from "../../util/mapFuncs/createLocationsReq";
+//import mutation from "../../util/mapFuncs/mutation";
 
 
 const libraries = ["places"];
@@ -23,25 +23,6 @@ const center = {
 };
 
 const queryClient = new QueryClient()
-/*
-async function createLocationReq(locationData) {
-  console.log(`called create`)
-  const res = await fetch("/api/locations/qq", {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json"
-    },
-    body: JSON.stringify({ create: {
-        ...locationData
-      }
-    })
-  })
-  const data = await res.json();
-  console.log(`data: ${JSON.stringify(data)}`)
-
-  return data.crudOpsReturn[0];
-}
-*/
 
 export default function ShowMap() {
   const { isLoaded, loadError } = useLoadScript({
@@ -57,7 +38,6 @@ export default function ShowMap() {
     -> If error, roll back to prev state
     -> Refetch & confirm. Update key w/ real key from db
     */
-    
     onMutate: (newData) => {
       queryClient.cancelQueries("locationsData");
       const existing = queryClient.getQueryData("locationsData");
