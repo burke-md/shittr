@@ -31,7 +31,9 @@ async function fetchLocationsReq(){
     body: JSON.stringify({read: {"locations": ""}})
   });
   const data = await res.json();
-  return data.crudOpsReturn[0];
+  const parsedData = data.crudOpsReturn[0];
+  console.log(`parsedData: ${parsedData}`);
+  return parsedData;
 }
 
 async function createLocationReq(locationData) {
@@ -47,10 +49,9 @@ async function createLocationReq(locationData) {
     })
   })
   const data = await res.json();
-  console.log(`data: ${data}`)
   console.log(`data: ${JSON.stringify(data)}`)
-  const { location } = data;
-  return location;
+
+  return data.crudOpsReturn[0];
 }
 
 
@@ -72,11 +73,14 @@ export default function ShowMap() {
     onMutate: (newData) => {
       queryClient.cancelQueries("locationsData");
       const existing = queryClient.getQueryData("locationsData");
+      console.log(`existing: ${existing}`)
+      /*
       queryClient.setQueryData("locationsData", (prev) => [
         ...prev,
         {...newData, id: new Date().toISOString() },
       ]);
-      //return cache state for rollback
+      */
+      //return prev cache state for rollback
       return existing;
     },
     onError: (error, newData, rollback) => rollback(),
@@ -84,12 +88,10 @@ export default function ShowMap() {
   });
 
   const onMapClick = useCallback((e) => {
-    console.log(`onmapclick`)
     mutation.mutate({
       latitude: e.latLng.lat(),
       longitude: e.latLng.lng()
     })
-    console.log(`onmapclick after mutation call`)
   }, []);
 
   const mapRef = React.useRef();
