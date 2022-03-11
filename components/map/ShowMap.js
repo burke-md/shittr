@@ -3,7 +3,8 @@ import { useCallback } from "react";
 import { QueryClientProvider, QueryClient, useQuery, useMutation } from "react-query";
 import { GoogleMap, useLoadScript, Marker, Data } from "@react-google-maps/api";
 import mapStyleOverride from "../../data/mapStyleOverride";
-import fetchLocationsReq from "../../util/mapRequests/fetchLocationsReq"
+import fetchLocationsReq from "../../util/mapRequests/fetchLocationsReq";
+import createLocationReq from "../../util/mapRequests/createLocationsReq";
 
 
 const libraries = ["places"];
@@ -23,20 +24,6 @@ const center = {
 
 const queryClient = new QueryClient()
 /*
-async function fetchLocationsReq(){
-  const res = await fetch("/api/locations/qq", {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json"
-    },
-    body: JSON.stringify({read: {"locations": ""}})
-  });
-  const data = await res.json();
-  const parsedData = data.crudOpsReturn[0];
-  console.log(`parsedData: ${parsedData}`);
-  return parsedData;
-}
-*/
 async function createLocationReq(locationData) {
   console.log(`called create`)
   const res = await fetch("/api/locations/qq", {
@@ -54,7 +41,7 @@ async function createLocationReq(locationData) {
 
   return data.crudOpsReturn[0];
 }
-
+*/
 
 export default function ShowMap() {
   const { isLoaded, loadError } = useLoadScript({
