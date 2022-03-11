@@ -2,8 +2,7 @@ import React, { useCallback } from "react";
 import { QueryClient, useQuery, useMutation } from "react-query";
 import { GoogleMap, useLoadScript, Marker, Data } from "@react-google-maps/api";
 import mapStyleOverride from "../../data/mapStyleOverride";
-import fetchLocationsReq from "../../util/mapFuncs/fetchLocationsReq";
-import createLocationReq from "../../util/mapFuncs/createLocationsReq";
+import { createLocations, fetchLocations } from "../../util/requests/locations";
 //import mutation from "../../util/mapFuncs/mutation";
 
 
@@ -30,9 +29,9 @@ export default function ShowMap() {
     libraries,
   });
 
-  const {data: locationsData, status} = useQuery("locationsData", fetchLocationsReq);
+  const { data: locationsData, status } = useQuery("locationsData", fetchLocations);
 
-  const mutation = useMutation(createLocationReq, {
+  const mutation = useMutation(createLocations, {
     /*Optimistic update
     -> Stop queries, preserve existing data, force update data with temp key
     -> If error, roll back to prev state
@@ -84,7 +83,7 @@ export default function ShowMap() {
         onClick={onMapClick}
         onLoad={onMapLoad}
         >
-      {locationsData?.map((location) => (
+        {locationsData && locationsData?.map((location) => (
         <Marker 
         key={location.id}
         position={{
