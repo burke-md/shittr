@@ -1,6 +1,6 @@
 import React from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn } from "next-auth/react"
 import ShowMap from "../components/map/ShowMap"
 
 const queryClient = new QueryClient()
@@ -13,8 +13,8 @@ export default function App() {
       <ShowMap />}
       {!session && 
       <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
+        Not signed in <br />
+        <button onClick={() => signIn()}>Sign in</button>
       </>}
     </QueryClientProvider>
   )
