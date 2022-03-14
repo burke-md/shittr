@@ -13,7 +13,7 @@ export default async function endpointHandler(req, res) {
         res.status(200).json({ result });
     } catch (err) {
         console.log(err);
-        res.status(err.code).json({ error: err.message });
+        res.status(err.code || 500).json({ error: err.message });
     }
 }
 

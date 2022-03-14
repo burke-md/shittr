@@ -83,7 +83,7 @@ export default function ShowMap() {
         onClick={onMapClick}
         onLoad={onMapLoad}
         >
-        {locationsData && locationsData?.map((location) => (
+        {locationsData && locationsData.data.result.map((location) => (
         <Marker 
         key={location.id}
         position={{

@@ -8,6 +8,7 @@ const instance = axios.create({
 instance.interceptors.response.use(
 	(res) => {
 		console.log('API RESPONSE', res);
+		return res;
 	}
 )
 
