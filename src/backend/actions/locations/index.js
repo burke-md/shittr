@@ -12,8 +12,9 @@ export async function createLocationAction(data) {
 		});
 		return location;
 	} catch (err) {
-		console.log(err);
-		return -1; // TODO: Throw error with status code & message
+		const error = new Error(`Error within createLocationAction: ${err}`)
+		error.code = 500;
+		throw error;
 	} finally {
 		await prisma.$disconnect();
 	}
@@ -30,8 +31,9 @@ export async function deleteLocationAction(data) {
 		})
 		return deleteLocation;
 	} catch (err) {
-		console.log(err);
-		return -1;
+		const error = new Error(`Error within deleteLocationAction: ${err}`)
+		error.code = 500;
+		throw error;
 	} finally {
 		await prisma.$disconnect();
 	}
@@ -45,8 +47,9 @@ export async function readLocationAction() {
 		const locations = await prisma.locations.findMany();
 		return locations;
 	} catch (err) {
-		console.log(err);
-		return -1;
+		const error = new Error(`Error within readLocationAction: ${err}`)
+		error.code = 500;
+		throw error;
 	} finally {
 		await prisma.$disconnect();
 	}
@@ -67,8 +70,9 @@ export async function updateLocationAction(data) {
 		})
 		return updateLocation
 	} catch (err) {
-		console.log(err);
-		return -1;
+		const error = new Error(`Error within updateLocationAction: ${err}`)
+		error.code = 500;
+		throw error;
 	} finally {
 		await prisma.$disconnect();
 	}
