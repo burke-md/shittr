@@ -1,10 +1,8 @@
 import React, { useCallback } from "react";
-import { QueryClient, useQuery, useMutation } from "react-query";
+import { useQueryClient, useQuery, useMutation } from "react-query";
 import { GoogleMap, useLoadScript, Marker, Data } from "@react-google-maps/api";
 import mapStyleOverride from "../../data/mapStyleOverride";
 import { createLocations, fetchLocations } from "../../util/requests/locations";
-//import mutation from "../../util/mapFuncs/mutation";
-
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -21,9 +19,9 @@ const center = {
   lng: -79.3832,
 };
 
-const queryClient = new QueryClient()
 
 export default function ShowMap() {
+  const queryClient = useQueryClient();
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -32,26 +30,25 @@ export default function ShowMap() {
   const { data: locationsData, status } = useQuery("locationsData", fetchLocations);
 
   const mutation = useMutation(createLocations, {
-    /*Optimistic update
-    -> Stop queries, preserve existing data, force update data with temp key
-    -> If error, roll back to prev state
-    -> Refetch & confirm. Update key w/ real key from db
-    */
-    onMutate: (newData) => {
-      queryClient.cancelQueries("locationsData");
-      const existing = queryClient.getQueryData("locationsData");
-      console.log(`existing: ${existing}`)
-      /*
-      queryClient.setQueryData("locationsData", (prev) => [
-        ...prev,
-        {...newData, id: new Date().toISOString() },
-      ]);
-      */
+    onMutate: async (newData) => {
+      await queryClient.cancelQueries("locationsData");
+      const existing = await queryClient.getQueryData("locationsData");
+      queryClient.setQueryData("locationsData", 
+        (prev) => {
+          return {
+            data: [
+              ...prev.data,
+              {...newData, id: new Date().toISOString() },
+            ]
+          }
+        }
+      );
+      
       //return prev cache state for rollback
       return existing;
     },
     onError: (error, newData, rollback) => rollback(),
-    onSettled: () => queryClient.refetchQueries("locations"),
+    onSettled: () => queryClient.refetchQueries("locationsData"),
   });
 
   const onMapClick = useCallback((e) => {
@@ -83,15 +80,19 @@ export default function ShowMap() {
         onClick={onMapClick}
         onLoad={onMapLoad}
         >
-        {locationsData && locationsData.data.result.map((location) => (
-        <Marker 
-        key={location.id}
-        position={{
-          lat: Number(location.latitude), 
-          lng: Number(location.longitude)
-        }}
-        />
-      ))}  
+        {
+          locationsData && locationsData.data.map(
+            (location) => (
+              <Marker 
+                key={location.id}
+                position={{
+                  lat: Number(location.latitude), 
+                  lng: Number(location.longitude)
+                }}
+              />
+            )
+          )
+        }  
       </GoogleMap>
     )}
     </>

@@ -39,12 +39,12 @@ export async function deleteLocationAction(data) {
 	}
 }
 
-
 export async function readLocationAction() {
 	const prisma = new PrismaClient({ log: ["query"] });
 
 	try {
 		const locations = await prisma.locations.findMany();
+		console.log(`locations backend: ${JSON.stringify(locations)}`);
 		return locations;
 	} catch (err) {
 		const error = new Error(`Error within readLocationAction: ${err}`)

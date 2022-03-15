@@ -9,8 +9,7 @@ export default async function endpointHandler(req, res) {
     try {
         const reqData = req.body;
         const result = await handleCrud(req.method, reqData);
-
-        res.status(200).json({ result });
+        res.status(200).json(result);
     } catch (err) {
         console.log(err);
         res.status(err.code || 500).json({ error: err.message });
@@ -30,7 +29,6 @@ async function handleCrud(method, data) {
     if (!acceptableMethods.includes(method)) {
         const error = new Error('Wrong method provided.');
         error.code = 400;
-
         throw error;
     }
     
